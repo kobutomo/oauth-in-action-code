@@ -1,16 +1,16 @@
-var header = { 
-	typ: 'JWT', 
-	alg: rsaKey.alg, 
-	kid: rsaKey.kid
+var header = {
+  typ: "JWT",
+  alg: rsaKey.alg,
+  kid: rsaKey.kid,
 };
 
 var payload = {
-	iss: 'http://localhost:9001/',
-	sub: code.user ? code.user.sub : null,
-	aud: 'http://localhost:9002/',
-	iat: Math.floor(Date.now() / 1000),
-	exp: Math.floor(Date.now() / 1000) + (5 * 60),
-	jti: randomstring.generate(8)
+  iss: "http://localhost:9001/",
+  sub: code.user ? code.user.sub : null,
+  aud: "http://localhost:9002/",
+  iat: Math.floor(Date.now() / 1000),
+  exp: Math.floor(Date.now() / 1000) + 5 * 60,
+  jti: randomstring.generate(8),
 };
 
 console.log(payload);
@@ -24,4 +24,9 @@ var stringPayload = JSON.stringify(payload);
 //var access_token = jose.jws.JWS.sign('HS256', stringHeader, stringPayload, Buffer.from(sharedTokenSecret).toString('hex'));
 
 var privateKey = jose.KEYUTIL.getKey(rsaKey);
-var access_token = jose.jws.JWS.sign(rsaKey.alg, stringHeader, stringPayload, privateKey);
+var access_token = jose.jws.JWS.sign(
+  rsaKey.alg,
+  stringHeader,
+  stringPayload,
+  privateKey
+);
