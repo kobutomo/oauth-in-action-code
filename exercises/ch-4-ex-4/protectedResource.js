@@ -82,7 +82,27 @@ app.get("/favorites", getAccessToken, requireAccessToken, function (req, res) {
     user: "Unknown",
     favorites: { movies: [], foods: [], music: [] },
   };
-  res.json(unknown);
+  if (req.access_token.user === "alice") {
+    let fav = {};
+    if (req.access_token.scope.includes("movies"))
+      fav.movies = aliceFavorites.movies;
+    if (req.access_token.scope.includes("foods"))
+      fav.foods = aliceFavorites.foods;
+    if (req.access_token.scope.includes("music"))
+      fav.music = aliceFavorites.music;
+    res.json({ user: "alice", favorites: fav });
+  } else if (req.access_token.user === "bob") {
+    let fav = {};
+    if (req.access_token.scope.includes("movies"))
+      fav.movies = bobFavorites.movies;
+    if (req.access_token.scope.includes("foods"))
+      fav.foods = bobFavorites.foods;
+    if (req.access_token.scope.includes("music"))
+      fav.music = bobFavorites.music;
+    res.json({ user: "bob", favorites: fav });
+  } else {
+    res.json(unknown);
+  }
 });
 
 var server = app.listen(9002, "localhost", function () {
